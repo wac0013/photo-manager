@@ -82,6 +82,7 @@ pnpm dev
 | User Service | 3000 | http://localhost:3000 |
 | Photo Service | 4000 | http://localhost:4000 |
 | API Gateway | 8080 | http://localhost:8080 |
+| Mailpit (E-mail) | 8025 | http://localhost:8025 |
 | PostgreSQL | 5432 | localhost:5432 |
 | Redis | 6379 | localhost:6379 |
 
