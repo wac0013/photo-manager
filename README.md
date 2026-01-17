@@ -1,54 +1,150 @@
-# Photo Manager
+# 📸 Photo Manager
 
-Este é um projeto que gerencia fotos, organizado em microserviços utilizando sub-módulos Git.
+Sistema completo de gerenciamento de fotos organizado em álbuns, com autenticação de usuários e armazenamento em nuvem.
 
-## Estrutura do Projeto
+## 🏗️ Arquitetura
 
-O projeto é composto pelos seguintes sub-módulos:
+O projeto segue uma arquitetura de microserviços, composto por:
 
-- `front`: Frontend da aplicação (Vite, React 19, TanStack, Tailwind, Shadcn).
-- `user-service`: Microserviço de usuários (NestJS, Prisma 7, Better Auth, Swagger).
-- `photo-service`: Microserviço de fotos.
-- `infra`: Infraestrutura como código (Terraform).
-
-## Como clonar o projeto
-
-Como o projeto utiliza sub-módulos, você deve clonar utilizando o comando:
-
-```bash
-git clone --recursive <url-do-repositorio>
+```
+photo-manager/
+├── modules/
+│   ├── front/           # Frontend React + Vite
+│   ├── user-service/    # Serviço de autenticação (NestJS)
+│   ├── photo-service/   # Serviço de fotos/álbuns (NestJS)
+│   └── infra/           # Configurações de infraestrutura
+├── nginx/               # API Gateway
+├── docker-compose.yml   # Orquestração de containers
+└── data/                # Dados persistentes (PostgreSQL)
 ```
 
-Ou, se já clonou:
+## 🚀 Tecnologias
+
+| Módulo | Tecnologias |
+|--------|-------------|
+| **Frontend** | React 19, Vite, TanStack Router, TanStack Query, Tailwind CSS, shadcn/ui |
+| **User Service** | NestJS 11, Prisma, Better Auth, PostgreSQL |
+| **Photo Service** | NestJS 11, Prisma, Google Cloud Storage, Sharp |
+| **Infraestrutura** | Docker, Nginx, PostgreSQL, Redis |
+
+## 📋 Pré-requisitos
+
+- Node.js 22+
+- pnpm ou npm
+- Docker e Docker Compose
+- Conta no Google Cloud Platform (para armazenamento de imagens)
+
+## 🛠️ Instalação
+
+### 1. Clone o repositório
 
 ```bash
-git submodule update --init --recursive
+git clone git@github.com-personal:wac0013/photo-manager.git
+cd photo-manager
 ```
 
-## Como executar o projeto
+### 2. Inicie os serviços de infraestrutura
 
-Para subir todos os serviços, incluindo as dependências (Redis e Postgres), utilize o Docker Compose:
+```bash
+docker-compose up -d db redis gateway
+```
+
+### 3. Configure as variáveis de ambiente
+
+Crie os arquivos `.env` em cada módulo seguindo os exemplos `.env.example`.
+
+### 4. Instale as dependências e execute as migrações
+
+```bash
+# User Service
+cd modules/user-service
+pnpm install
+pnpm prisma:migrate
+pnpm start:dev
+
+# Photo Service
+cd ../photo-service
+pnpm install
+pnpm prisma:migrate
+pnpm start:dev
+
+# Frontend
+cd ../front
+pnpm install
+pnpm dev
+```
+
+## 🌐 Portas e Endpoints
+
+| Serviço | Porta | URL |
+|---------|-------|-----|
+| Frontend | 5173 | http://localhost:5173 |
+| User Service | 3000 | http://localhost:3000 |
+| Photo Service | 4000 | http://localhost:4000 |
+| API Gateway | 8080 | http://localhost:8080 |
+| PostgreSQL | 5432 | localhost:5432 |
+| Redis | 6379 | localhost:6379 |
+
+## 📖 Documentação das APIs
+
+- **User Service**: http://localhost:3000/docs ou http://localhost:8080/api/users/docs
+- **Photo Service**: http://localhost:4000/docs ou http://localhost:8080/api/photos/docs
+
+## 🐳 Docker
+
+### Subir todos os serviços
 
 ```bash
 docker-compose up -d
 ```
 
-## Tecnologias Utilizadas
+### Subir apenas infraestrutura
 
-- **Node.js 24**: Ambiente de execução para os serviços.
-- **NestJS**: Framework para os microserviços de backend.
-- **Vite & React 19**: Tecnologias de frontend.
-- **Prisma 7**: ORM para acesso ao banco de dados.
-- **Better Auth**: Sistema de autenticação moderno.
-- **Redis**: Cache e mensageria.
-- **Postgres**: Banco de dados relacional.
-- **Docker & Docker Compose**: Orquestração de containers local.
-- **Git Submodules**: Gerenciamento de múltiplos repositórios.
+```bash
+docker-compose up -d db redis gateway
+```
 
-## Autenticação (Better Auth)
+### Verificar logs
 
-O projeto está integrado ao Better Auth. Para que a autenticação funcione:
+```bash
+docker-compose logs -f [service-name]
+```
 
-1. O `user-service` atua como o servidor de autenticação.
-2. O `front` deve ter a variável de ambiente `VITE_AUTH_URL` apontando para o endpoint do `user-service` (ex: `http://localhost:8080/api/auth`).
-3. Configure os provedores (Email/Senha e Google) no `user-service`.
+## 📁 Estrutura dos Módulos
+
+### Frontend (`modules/front`)
+Aplicação React responsável pela interface do usuário.
+- Gerenciamento de álbuns e fotos
+- Upload de imagens com validação
+- Visualização em grid e tabela
+- Tema claro/escuro
+
+### User Service (`modules/user-service`)
+Serviço de autenticação e gerenciamento de usuários.
+- Autenticação via Better Auth
+- Gerenciamento de sessões
+- Validação de tokens
+
+### Photo Service (`modules/photo-service`)
+Serviço de gerenciamento de fotos e álbuns.
+- CRUD de álbuns
+- Upload e processamento de imagens
+- Armazenamento no Google Cloud Storage
+- Extração de metadados (cor dominante, dimensões, etc.)
+
+## 🔒 Autenticação
+
+O sistema utiliza **Better Auth** para autenticação, suportando:
+- Login com email/senha
+- Gerenciamento de sessões
+- Tokens JWT
+
+## 📝 Licença
+
+Este projeto é privado e de uso restrito.
+
+## 👤 Autor
+
+**Wellington Costa**
+- Email: wac.0013@gmail.com
+- GitHub: [@wac0013](https://github.com/wac0013)
