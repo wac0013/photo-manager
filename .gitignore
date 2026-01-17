@@ -4,3 +4,4 @@ data
 
 .cursor
 .DS_Store
+*.code-workspace
