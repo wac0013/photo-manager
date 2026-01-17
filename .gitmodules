@@ -1,0 +1,12 @@
+[submodule "front"]
+	path = modules/front
+	url = git@github.com:wac0013/photo-manager-front.git
+[submodule "user-service"]
+	path = modules/user-service
+	url = git@github.com:wac0013/photo-manager-user-service.git
+[submodule "photo-service"]
+	path = modules/photo-service
+	url = git@github.com:wac0013/photo-manager-photo-service.git
+[submodule "infra"]
+	path = modules/infra
+	url = git@github.com:wac0013/photo-manager-infra.git
